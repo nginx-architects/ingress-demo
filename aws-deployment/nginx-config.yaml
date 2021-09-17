@@ -7,4 +7,4 @@ data:
   proxy-protocol: "True"
   real-ip-header: "proxy_protocol"
   set-real-ip-from: "0.0.0.0/0"
-  lb-method: "round_robin"
+  lb-method: "least_time last_byte"
