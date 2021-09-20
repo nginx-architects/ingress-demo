@@ -67,4 +67,6 @@ spec:
           - -report-ingress-status
           - -external-service=nginx-ingress
           - -enable-prometheus-metrics
+          - -enable-latency-metrics
+          - -enable-snippets
          #- -global-configuration=$(POD_NAMESPACE)/nginx-configuration
