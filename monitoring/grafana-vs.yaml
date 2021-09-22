@@ -6,7 +6,7 @@ metadata:
 spec:
   host: grafana.ingress.demo
   tls:
-    secret: grafana-secret
+    secret: ingress-demo
   routes:
   - path: /
     route: monitoring/grafana-dashboard

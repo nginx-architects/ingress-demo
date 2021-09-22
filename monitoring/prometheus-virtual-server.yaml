@@ -5,6 +5,8 @@ metadata:
   namespace: monitoring
 spec:
   host: prometheus.ingress.demo
+  tls:
+    secret: ingress-demo
   upstreams:
   - name: prometheus 
     service: nginx-prometheus-server
