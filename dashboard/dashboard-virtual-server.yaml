@@ -1,0 +1,27 @@
+# TODO: separate dashboard routes for each NIC in the daemonset
+# currently the page cycles through each dashboard associated with a NIC 
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: dashboard-vs 
+  namespace: nginx-ingress
+spec:
+  host: dashboard.ingress.demo
+  tls:
+    secret: ingress-demo
+  upstreams:
+  - name: dashboard 
+    service: dashboard-svc
+    port: 9000
+  routes:
+  - path: /
+    action:
+      redirect:
+        url: https://dashboard.ingress.demo/dashboard.html
+        code: 302
+  - path: /dashboard.html
+    action:
+      pass: dashboard
+  - path: /api
+    action:
+      pass: dashboard

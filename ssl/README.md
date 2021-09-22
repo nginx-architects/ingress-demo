@@ -22,4 +22,5 @@ Generate the yaml file for the secret and apply to the appropriate namespaces:
 kubectl create secret tls ingress-demo --key ingress.demo.key --cert ingress.demo.crt --dry-run=client -o=yaml > ingress-demo-secret.yaml
 kubectl apply -f ingress-demo-secret.yaml
 kubectl apply -f ingress-demo-secret.yaml -n monitoring
+kubectl apply -f ingress-demo-secret.yaml -n nginx-ingress
 ```
