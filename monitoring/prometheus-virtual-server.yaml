@@ -4,7 +4,7 @@ metadata:
   name: prometheus-vs 
   namespace: monitoring
 spec:
-  host: artie.prometheus.com
+  host: prometheus.ingress.demo
   upstreams:
   - name: prometheus 
     service: nginx-prometheus-server

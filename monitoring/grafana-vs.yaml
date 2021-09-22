@@ -4,7 +4,7 @@ metadata:
   name: grafana-vs
   namespace: monitoring
 spec:
-  host: artie.grafana.com
+  host: grafana.ingress.demo
   tls:
     secret: grafana-secret
   routes:

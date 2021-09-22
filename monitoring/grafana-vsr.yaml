@@ -4,7 +4,7 @@ metadata:
   name: grafana-dashboard
   namespace: monitoring
 spec:
-  host: artie.grafana.com
+  host: grafana.ingress.demo
   upstreams:
   - name: grafana 
     service: nginx-grafana

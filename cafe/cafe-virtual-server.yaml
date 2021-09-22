@@ -3,7 +3,7 @@ kind: VirtualServer
 metadata:
   name: cafe-vs
 spec:
-  host: artie.cafe.com
+  host: cafe.ingress.demo
   tls:
     secret: cafe-secret
     redirect:
@@ -41,7 +41,7 @@ spec:
   - path: /
     action:
       redirect:
-        url: https://artie.cafe.com/coffee
+        url: https://cafe.ingress.demo/coffee
         code: 302
   - path: /tea
     action:

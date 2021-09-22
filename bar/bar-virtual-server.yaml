@@ -3,7 +3,7 @@ kind: VirtualServer
 metadata:
   name: bar-vs
 spec:
-  host: artie.bar.com
+  host: bar.ingress.demo
   tls:
     secret: cafe-secret
     redirect:
@@ -53,7 +53,7 @@ spec:
   - path: /
     action:
       redirect:
-        url: https://artie.bar.com/beer
+        url: https://bar.ingress.demo/beer
         code: 302
   - path: /beer
     action:
