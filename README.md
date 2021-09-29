@@ -4,7 +4,7 @@ This codebase provides everything you need to deploy the Nginx Plus Ingress Cont
 This is meant to be a guide for quickly standing up specific components and use cases for the Nginx Plus Ingress Controller.  If a lot of this is new to you and you would prefer for walk through these components step-by-step, you can follow the labs in our [Nginx Ingress Workshop](https://github.com/jasonwilliams14/nginx-ingress-workshops)
 
 ## Manual Configuration
-Charts that map to use cases and their install instructions are located in the sub-folders of this repo.  Read the table of contents summaries below and drill into the folders that are relevant to your use-cases.
+Charts that map to use cases and their install instructions are located in the sub-folders of this repo.  Read the table of contents summaries below and drill into the folders that are relevant to you.
 
 Table of Contents
 * Cloud Deployments -- Select a cloud provider to deploy your cluster into.  
