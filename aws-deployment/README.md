@@ -58,3 +58,52 @@ Applies some Nginx config values including what traffic is allowed to the LoadBa
 
 `kubectl apply -f nginx-config.yaml`
 
+Now we've deployed everything we need except the ingress controller itself.  We need to publish the Nginx Plus Ingress Controller image to ECR and then reference it in the `nginx-plus-ingress.yaml` before we can apply the chart.
+
+There are ![a couple ways](https://docs.nginx.com/nginx-ingress-controller/installation/using-the-jwt-token-docker-secret/) to publish the licensed image.  For AWS, the easiest is to probably ![Subscribe to NGINX Ingress Controller](https://aws.amazon.com/marketplace/pp/prodview-fx3faxl7zqeau?qid=1626138210561&sr=0-2&ref_=srh_res_product_title) in the AWS Marketplace.
+
+Once you go through the `subscribe` and `configuration` (Select EKSDelivery for latest version) menus, the `launch` menu will have a `View container image details` link that will open a modal.  Follow these instructions to log in to the registry with your docker client and pull the image.
+
+Copy the image name into Line 21 of `nginx-plus-ingress.yaml`.  It will look something like this: `709825985650.dkr.ecr.us-east-1.amazonaws.com/nginx/nginx-plus-ingress:2.0.2`
+
+If you used a different Service Account name than the default `nginx-ingress`, change it on Line 19.
+
+Now we're ready to create the ingress controller DaemonSet:
+
+`kubectl apply -f nginx-plus-ingress.yaml`
+
+You should see one ingress running for each of your nodes:
+
+```
+$ kubectl get pods -n nginx-ingress -o wide
+NAME                  READY   STATUS    RESTARTS   AGE     IP              NODE
+nginx-ingress-2bwzf   1/1     Running   0          6m25s   192.168.14.61   ip-192-168-5-162.ec2.internal 
+nginx-ingress-gxq77   1/1     Running   0          6m6s    192.168.72.94   ip-192-168-79-128.ec2.internal
+nginx-ingress-vnqg2   1/1     Running   0          6m13s   192.168.36.16   ip-192-168-34-166.ec2.internal
+```
+
+Run `kubectl describe ds -n nginx-ingress` if you see something different than the above to diagnose the issue.
+
+To test, get the EXTERNAL-IP for the ELB LoadBalancer service that we created earlier:
+
+```
+$ kubectl get svc -n nginx-ingress
+NAME            TYPE           CLUSTER-IP      EXTERNAL-IP                         PORT(S)                      AGE
+dashboard-svc   ClusterIP      10.100.85.179   <none>                              9000/TCP                     29d
+nginx-ingress   LoadBalancer   10.100.233.58   <xxx>.<region>.elb.amazonaws.com   80:32108/TCP,443:31476/TCP   29d
+```
+
+Visit the ELB endpoint in your browser and you should be taken to the default 404 page hosted by your new ingress controller.
+
+To determine the IP Addresses of the ELB to add to your hosts file on your computer, run the following:
+
+`dig <xxx>.<region>.elb.amazonaws.com`
+
+You should get a list of IP addresses in the `;; ANSWER SECTION:` that you can map to the appropriate endpoints.
+
+This example lists all the endpoints used in other sections of this repo:
+
+```
+# EKS ELB IP
+1.1.1.2 1.1.2.3 1.2.3.4 cafe.ingress.demo dashboard.ingress.demo bar.ingress.demo grafana.ingress.demo prometheus.ingress.demo
+```
