@@ -34,3 +34,27 @@ Creates IAM service account for the Nginx Plus Ingress Controller that gets tied
 `eksctl create iamserviceaccount --name nginx-ingress --namespace nginx-ingress --cluster <eks-cluster-name> --region <eks-cluster-region> --attach-policy-arn arn:aws:iam::aws:policy/AWSMarketplaceMeteringRegisterUsage --approve`
 
 You can change the service account name and namespace but you would then need to propagate those changes to some of the upcoming charts.  If you use `nginx-ingress` all of the charts that reference the service account or namespace will work as is.
+
+At this point you should be able to get the nodes with kubectl:
+```
+$ kubectl get nodes
+NAME                             STATUS   ROLES    AGE   VERSION
+ip-192-168-34-166.ec2.internal   Ready    <none>   35d   v1.21.2-eks-55daa9d
+ip-192-168-5-162.ec2.internal    Ready    <none>   35d   v1.21.2-eks-55daa9d
+ip-192-168-79-128.ec2.internal   Ready    <none>   35d   v1.21.2-eks-55daa9d
+```
+
+Edit lines 104/105 in `rbac.yaml` to match your service account name and namespace if you changed them from the default `nginx-ingress`
+
+Creates the ClusterRole and ClusterRoleBinding for authorizing the service account you just created:
+
+`kubectl apply -f rbac.yaml`
+
+Creates an ELB in AWS with a LoadBalancer type Service routes all HTTP/HTTPS traffic (80/443) from the ELB to the `nginx-ingress` app which we haven't created yet:
+
+`kubectl apply -f loadbalancer-aws-elb.yaml`
+
+Applies some Nginx config values including what traffic is allowed to the LoadBalancer.  Needs to be applied after the LoadBalancer Service is created allow traffic through it:
+
+`kubectl apply -f nginx-config.yaml`
+
