@@ -1,0 +1,12 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nginx-config
+  namespace: nginx-ingress
+data:
+  proxy-protocol: "True"
+  real-ip-header: "proxy_protocol"
+  # Allows all traffic through the LoadBalancer
+  set-real-ip-from: "0.0.0.0/0"
+  lb-method: "least_time last_byte"
+  log-format:  '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for" "$resource_name" "$resource_type" "$resource_namespace" "$service" "$request_id" "$request_time" "$upstream_addr" "$upstream_connect_time" "$upstream_header_time" "$upstream_response_time" "$upstream_queue_time" "$upstream_cache_status"'
